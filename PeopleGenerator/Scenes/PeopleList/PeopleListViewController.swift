@@ -1,20 +1,16 @@
 //
-//  ViewController.swift
+//  PeopleListViewController.swift
 //  PeopleGenerator
 //
 //  Created by Oğuzhan Kabul on 14.06.2023.
 //
 
-import UIKit
+import Foundation
 
-class ViewController: UIViewController {
-
+final class PeopleListViewController: BaseViewController<PeopleListViewModel> {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         view.backgroundColor = .red
     }
-
-
 }
-
