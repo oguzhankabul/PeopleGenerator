@@ -1,5 +1,5 @@
 //
-//  NoOneHereView.swift
+//  SingleTextView.swift
 //  PeopleGenerator
 //
 //  Created by Oğuzhan Kabul on 14.06.2023.
@@ -14,7 +14,6 @@ final class SingleTextView: BaseView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .black
-        label.numberOfLines = 1
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
@@ -33,7 +32,7 @@ final class SingleTextView: BaseView {
             tagLabel.topAnchor.constraint(equalTo: topAnchor),
             tagLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             tagLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tagLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            tagLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
     

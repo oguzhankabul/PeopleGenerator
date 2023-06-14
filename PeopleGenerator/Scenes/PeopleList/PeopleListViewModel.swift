@@ -7,17 +7,22 @@
 
 import Foundation
 
+// MARK: - PeopleListViewModelDelegate
 protocol PeopleListViewModelDelegate: AnyObject {
-    func fetchCompleted()
+    func didFetch()
     func showError(message: String)
     func showEmptyState()
     func hideEmptyState()
 }
 
+// MARK: - PeopleListViewModel
 final class PeopleListViewModel: BaseViewModel {
     
-    private var persons: Set<PersonUIModel> = []
+    private var personsArray: [PersonUIModel] = []
+    private var personsSet: Set<PersonUIModel> = []
     private var nextIdentifier: String?
+    private var lastRefreshTime: Date?
+    private let minimumRefreshInterval: TimeInterval = 3.0
     
     weak var delegate: PeopleListViewModelDelegate?
     
@@ -32,33 +37,39 @@ final class PeopleListViewModel: BaseViewModel {
                     self.addPerson(person)
                 }
                 self.nextIdentifier = nextIdentifier
-                self.delegate?.fetchCompleted()
+                self.delegate?.didFetch()
             }
         }
     }
     
     func refreshPeople() {
-        persons = []
+        let now = Date()
+        guard lastRefreshTime == nil || now.timeIntervalSince(lastRefreshTime!) > minimumRefreshInterval || personsArray.isEmpty else {
+            return
+        }
+        lastRefreshTime = now
+        personsArray = []
+        personsSet = []
         nextIdentifier = nil
         fetchPeople()
     }
     
-    func numberOfPeople() -> Int {
-        return persons.count
+    func numberOfPeople() -> (numberOfPeople: Int, isEmpty: Bool) {
+        return (personsArray.count, personsArray.isEmpty)
     }
     
     func person(at index: Int) -> PersonUIModel? {
-        guard index >= 0 && index < persons.count else {
+        guard index >= 0 && index < personsArray.count else {
             return nil
         }
         
-        let personArray = Array(persons)
-        return personArray[index]
+        return personsArray[index]
     }
     
     private func addPerson(_ person: Person) {
         let personUIModel = PersonUIModel(person: person)
-        
-        persons.insert(personUIModel)
+        if personsSet.insert(personUIModel).inserted {
+            personsArray.append(personUIModel)
+        }
     }
 }
