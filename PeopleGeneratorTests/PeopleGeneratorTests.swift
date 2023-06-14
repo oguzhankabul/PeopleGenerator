@@ -8,29 +8,64 @@
 import XCTest
 @testable import PeopleGenerator
 
-final class PeopleGeneratorTests: XCTestCase {
+final class PeopleListViewModelTests: XCTestCase {
+    
+    var viewModel: PeopleListViewModel!
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() {
+        super.setUp()
+        viewModel = PeopleListViewModel()
+        
+        // Manually add a few people to simulate a fetch operation
+        let person1 = Person(id: 1, fullName: "Person 1")
+        let person2 = Person(id: 2, fullName: "Person 2")
+        let person3 = Person(id: 3, fullName: "Person 3")
+
+        viewModel.addPerson(person1)
+        viewModel.addPerson(person2)
+        viewModel.addPerson(person3)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override func tearDown() {
+        viewModel = nil
+        super.tearDown()
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testFetchPeople() {
+        // Given
+        let initialCount = 3 // Since we manually added three people in `setUp`
+
+        // When
+        let fetchedCount = viewModel.numberOfPeople().numberOfPeople
+        let fetchedIsEmpty = viewModel.numberOfPeople().isEmpty
+
+        // Then
+        XCTAssertEqual(fetchedCount, initialCount)
+        XCTAssertEqual(fetchedIsEmpty, false)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+    // Test refreshing people
+    func testAddPerson() {
+        // Given
+        let countBeforeAdded = viewModel.numberOfPeople().numberOfPeople
 
+        // When
+        viewModel.addPerson(Person(id: 4, fullName: "Person 4"))
+        let countAferAdded = viewModel.numberOfPeople().numberOfPeople
+
+        // Then
+        XCTAssertFalse(countBeforeAdded == countAferAdded)
+    }
+    
+    func testAddSamePerson() {
+        // Given
+        let countBeforeAdded = viewModel.numberOfPeople().numberOfPeople
+
+        // When
+        viewModel.addPerson(Person(id: 3, fullName: "Person 3")) // Array has already same Person
+        let countAferAdded = viewModel.numberOfPeople().numberOfPeople
+
+        // Then
+        XCTAssertTrue(countBeforeAdded == countAferAdded)
+    }
 }

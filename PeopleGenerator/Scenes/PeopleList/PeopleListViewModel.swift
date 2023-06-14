@@ -65,7 +65,7 @@ final class PeopleListViewModel: BaseViewModel {
         return personsArray[index]
     }
     
-    private func addPerson(_ person: Person) {
+    func addPerson(_ person: Person) {
         let personUIModel = PersonUIModel(person: person)
         if personsSet.insert(personUIModel).inserted {
             personsArray.append(personUIModel)
