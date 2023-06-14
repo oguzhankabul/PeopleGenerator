@@ -61,7 +61,6 @@ final class PeopleListViewModel: BaseViewModel {
         guard index >= 0 && index < personsArray.count else {
             return nil
         }
-        
         return personsArray[index]
     }
     
