@@ -22,10 +22,20 @@ class BaseViewController<ViewModel: BaseViewModel>: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindViewModel()
+        setupViews()
+        setupLayouts()
     }
-
-    func bindViewModel() {
-        // override in subclass
+    
+    // MARK: - SetupViews
+    func setupViews() {}
+    
+    // MARK: - SetupLayouts
+    func setupLayouts() {}
+    
+    // MARK: - Error Handling
+    func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }
