@@ -8,11 +8,8 @@
 import Foundation
 
 class BaseViewModel {
-    init() {
-        setupBindings()
-    }
-
-    func setupBindings() {
-        // override in subclass
+    
+    deinit {
+        debugPrint("deinit \(self)")
     }
 }

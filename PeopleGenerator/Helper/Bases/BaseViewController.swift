@@ -22,10 +22,13 @@ class BaseViewController<ViewModel: BaseViewModel>: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindViewModel()
+        setupViews()
+        setupLayouts()
     }
-
-    func bindViewModel() {
-        // override in subclass
-    }
+    
+    // MARK: - SetupViews
+    func setupViews() {}
+    
+    // MARK: - SetupLayouts
+    func setupLayouts() {}
 }
