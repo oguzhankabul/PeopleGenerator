@@ -29,7 +29,15 @@ final class PeopleListViewController: BaseViewController<PeopleListViewModel> {
         let view = SingleTextView()
         let vm = SingleTextViewModel(tagText: "No one here :)")
         view.set(vm)
+        view.isHidden = true
         return view
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        return activityIndicator
     }()
     
     override func viewDidLoad() {
@@ -41,7 +49,7 @@ final class PeopleListViewController: BaseViewController<PeopleListViewModel> {
     
     override func setupViews() {
         super.setupViews()
-        view.addSubview(tableView)
+        [tableView, activityIndicator].forEach({ view.addSubview( $0 )})
     }
     
     override func setupLayouts() {
@@ -50,7 +58,10 @@ final class PeopleListViewController: BaseViewController<PeopleListViewModel> {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -66,12 +77,6 @@ final class PeopleListViewController: BaseViewController<PeopleListViewModel> {
     @objc private func refreshList() {
         viewModel.refreshPeople()
         tableView.reloadData()
-    }
-    
-    private func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -119,7 +124,9 @@ extension PeopleListViewController: UITableViewDelegate {
 // MARK: - UITableViewDelegate
 extension PeopleListViewController: PeopleListViewModelDelegate {
     func showEmptyState() {
-        emptyStateView.isHidden = false
+        if !activityIndicator.isAnimating {
+            emptyStateView.isHidden = false
+        }
     }
     
     func hideEmptyState() {
@@ -127,6 +134,8 @@ extension PeopleListViewController: PeopleListViewModelDelegate {
     }
     
     func didFetch() {
+        activityIndicator.stopAnimating()
+        activityIndicator.isHidden = true
         refreshControl.endRefreshing()
         tableView.reloadData()
     }

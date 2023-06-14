@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class SingleTextViewModel {
+struct SingleTextViewModel {
     
     public var tagText: String
     

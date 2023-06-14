@@ -28,8 +28,7 @@ final class PeopleListViewModel: BaseViewModel {
     
     func fetchPeople() {
         PeopleManager.shared.fetchPeople(nextIdentifier: nextIdentifier) { [weak self] people, nextIdentifier, error in
-            guard let self = self else { return }
-            
+            guard let self else { return }
             if let error = error {
                 self.delegate?.showError(message: error.errorDescription)
             } else if let people = people {
